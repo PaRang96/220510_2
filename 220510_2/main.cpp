@@ -101,7 +101,7 @@ void DrawMap()
     {
         for (int j = 0; j < 10; j++)
         {
-            if (map[i][j] == 1)
+            if (map[j][i] == 1)
             {
                 cout << '#' << ' ';
             }
