@@ -24,9 +24,7 @@ struct FVector2D
 
 void SetLocation(FVector2D NewLocation);
 
-void MovementLogics(FVector2D PlayerPosition);
-
-void drawmap();
+void DrawMap();
 
 int main()
 {
@@ -37,7 +35,7 @@ int main()
     PlayerPosition.Y = 1;
 
     // console output once
-    drawmap();
+    DrawMap();
 
     SetLocation(PlayerPosition);
     cout << "P";
@@ -72,12 +70,15 @@ int main()
         }
 
         // logics
-        MovementLogics(PlayerPosition);
+        PlayerPosition.X = (PlayerPosition.X < 1 ? 1 : PlayerPosition.X);
+        PlayerPosition.Y = (PlayerPosition.Y < 1 ? 1 : PlayerPosition.Y);
+        PlayerPosition.X = (PlayerPosition.X > 17 ? 17 : PlayerPosition.X);
+        PlayerPosition.Y = (PlayerPosition.Y > 8 ? 8 : PlayerPosition.Y);
 
         system("cls");
 
         // draw map
-        drawmap();
+        DrawMap();
 
         SetLocation(PlayerPosition);
         cout << "P";
@@ -94,15 +95,7 @@ void SetLocation(FVector2D NewLocation)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
 }
 
-void MovementLogics(FVector2D PlayerPosition)
-{
-    PlayerPosition.X = (PlayerPosition.X < 1 ? 1 : PlayerPosition.X);
-    PlayerPosition.Y = (PlayerPosition.Y < 1 ? 1 : PlayerPosition.Y);
-    PlayerPosition.X = (PlayerPosition.X > 17 ? 17 : PlayerPosition.X);
-    PlayerPosition.Y = (PlayerPosition.Y > 8 ? 8 : PlayerPosition.Y);
-}
-
-void drawmap()
+void DrawMap()
 {
     for (int i = 0; i < 10; i++)
     {
