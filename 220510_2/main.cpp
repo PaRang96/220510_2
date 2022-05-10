@@ -3,114 +3,132 @@
 #include <Windows.h>
 using namespace std;
 
-int map[10][10] = {
-    {1,1,1,1,1,1,1,1,1,1},
-    {1,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,1},
-    {1,1,1,1,1,1,1,1,1,1}
+int Map[10][10] = {
+	{1,1,1,1,1,1,1,1,1,1},
+	{1,0,0,0,0,0,0,0,0,1},
+	{1,0,1,1,0,0,0,0,0,1},
+	{1,0,0,0,0,1,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,1},
+	{1,0,0,1,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,1,0,1},
+	{1,1,1,1,1,1,1,1,1,1}
 };
 
 struct FVector2D
 {
-    int X;
-    int Y;
+	int X;
+	int Y;
 };
 
 void SetLocation(FVector2D NewLocation);
 
-void DrawMap();
+void DrawBG(FVector2D StartPosition)
+{
+	for (int Y = 0; Y < 10; ++Y)
+	{
+		for (int X = 0; X < 10; ++X)
+		{
+			FVector2D Temp;
+			Temp.X = X + StartPosition.X;
+			Temp.Y = Y + StartPosition.Y;
+			SetLocation(Temp);
+			if (Map[Y][X] == 1)
+			{
+				cout << '#';
+			}
+			else
+			{
+				cout << ' ';
+			}
+		}
+	}
+
+}
 
 int main()
 {
-    // default settings
-    bool bRunning = true;
-    FVector2D PlayerPosition;
-    PlayerPosition.X = 1;
-    PlayerPosition.Y = 1;
+	bool bRunning = true;
+	FVector2D PlayerPosition;
+	PlayerPosition.X = 0;
+	PlayerPosition.Y = 0;
 
-    // console output once
-    DrawMap();
+	srand(static_cast<unsigned int>(time(nullptr)));
+	FVector2D StartPosition;
+	StartPosition.X = rand() % 10 + 1;
+	StartPosition.Y = rand() % 10 + 1;
 
-    SetLocation(PlayerPosition);
-    cout << "P";
+	while (bRunning)
+	{
+		int KeyCode = _getch();
 
-    // console output while getting input by keyboard
-    while (bRunning)
-    {
-        // input
-        int KeyCode = _getch();
+		switch (KeyCode)
+		{
+		case 'w':
+		case 'W':
+			if (Map[PlayerPosition.Y - 1][PlayerPosition.X] == 1)
+			{
+				PlayerPosition.Y = PlayerPosition.Y;
+				continue;
+			}
+			PlayerPosition.Y--;
+			break;
+		case 's':
+		case 'S':
+			if (Map[PlayerPosition.Y + 1][PlayerPosition.X] == 1)
+			{
+				PlayerPosition.Y = PlayerPosition.Y;
+				continue;
+			}
+			PlayerPosition.Y++;
+			break;
+		case 'a':
+		case 'A':
+			if (Map[PlayerPosition.Y][PlayerPosition.X - 1] == 1)
+			{
+				PlayerPosition.X = PlayerPosition.X;
+				continue;
+			}
+			PlayerPosition.X--;
+			break;
+		case 'd':
+		case 'D':
+			if (Map[PlayerPosition.Y][PlayerPosition.X + 1] == 1)
+			{
+				PlayerPosition.X = PlayerPosition.X;
+				continue;
+			}
+			PlayerPosition.X++;
+			break;
+		case 27:
+			bRunning = false;
+			break;
+		}
 
-        switch (KeyCode)
-        {
-        case 'w':
-        case 'W':
-            PlayerPosition.Y--;
-            break;
-        case 's':
-        case 'S':
-            PlayerPosition.Y++;
-            break;
-        case 'a':
-        case 'A':
-            PlayerPosition.X--;
-            break;
-        case 'd':
-        case 'D':
-            PlayerPosition.X++;
-            break;
-        case 27:
-            bRunning = false;
-            break;
-        }
+		PlayerPosition.X = PlayerPosition.X < 1 ? 1 : PlayerPosition.X;
+		PlayerPosition.Y = PlayerPosition.Y < 1 ? 1 : PlayerPosition.Y;
+		PlayerPosition.X = PlayerPosition.X >= 9 ? 8 : PlayerPosition.X;
+		PlayerPosition.Y = PlayerPosition.Y >= 9 ? 8 : PlayerPosition.Y;
 
-        // logics
-        PlayerPosition.X = (PlayerPosition.X < 1 ? 1 : PlayerPosition.X);
-        PlayerPosition.Y = (PlayerPosition.Y < 1 ? 1 : PlayerPosition.Y);
-        PlayerPosition.X = (PlayerPosition.X > 17 ? 17 : PlayerPosition.X);
-        PlayerPosition.Y = (PlayerPosition.Y > 8 ? 8 : PlayerPosition.Y);
+		system("cls");
 
-        system("cls");
+		DrawBG(StartPosition);
+		FVector2D Temp;
+		Temp.X = PlayerPosition.X + StartPosition.X;
+		Temp.Y = PlayerPosition.Y + StartPosition.Y;
+		SetLocation(Temp);
+		cout << "P";
+	}
 
-        // draw map
-        DrawMap();
 
-        SetLocation(PlayerPosition);
-        cout << "P";
-    }
-
-    return 0;
+	return 0;
 }
 
 void SetLocation(FVector2D NewLocation)
 {
-    COORD Cur;
-    Cur.X = NewLocation.X;
-    Cur.Y = NewLocation.Y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
-}
-
-void DrawMap()
-{
-    for (int i = 0; i < 10; i++)
-    {
-        for (int j = 0; j < 10; j++)
-        {
-            if (map[j][i] == 1)
-            {
-                cout << '#' << ' ';
-            }
-            else
-            {
-                cout << ' ' << ' ';
-            }
-        }
-        cout << endl;
-    }
-
+	COORD Cur;
+	Cur.X = NewLocation.X;
+	Cur.Y = NewLocation.Y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
 }
