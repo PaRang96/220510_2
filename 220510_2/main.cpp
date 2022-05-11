@@ -44,7 +44,6 @@ void DrawBG(FVector2D StartPosition)
 			}
 		}
 	}
-
 }
 
 int main()
@@ -67,38 +66,18 @@ int main()
 		{
 		case 'w':
 		case 'W':
-			if (Map[PlayerPosition.Y - 1][PlayerPosition.X] == 1)
-			{
-				PlayerPosition.Y = PlayerPosition.Y;
-				continue;
-			}
 			PlayerPosition.Y--;
 			break;
 		case 's':
 		case 'S':
-			if (Map[PlayerPosition.Y + 1][PlayerPosition.X] == 1)
-			{
-				PlayerPosition.Y = PlayerPosition.Y;
-				continue;
-			}
 			PlayerPosition.Y++;
 			break;
 		case 'a':
 		case 'A':
-			if (Map[PlayerPosition.Y][PlayerPosition.X - 1] == 1)
-			{
-				PlayerPosition.X = PlayerPosition.X;
-				continue;
-			}
 			PlayerPosition.X--;
 			break;
 		case 'd':
 		case 'D':
-			if (Map[PlayerPosition.Y][PlayerPosition.X + 1] == 1)
-			{
-				PlayerPosition.X = PlayerPosition.X;
-				continue;
-			}
 			PlayerPosition.X++;
 			break;
 		case 27:
@@ -111,6 +90,27 @@ int main()
 		PlayerPosition.X = PlayerPosition.X >= 9 ? 8 : PlayerPosition.X;
 		PlayerPosition.Y = PlayerPosition.Y >= 9 ? 8 : PlayerPosition.Y;
 
+		// modify PlayerPosition based on KeyCode (input)
+		if (Map[PlayerPosition.Y][PlayerPosition.X] == 1)
+		{
+			if (KeyCode == 'w' || KeyCode == 'W')
+			{
+				PlayerPosition.Y++;
+			}
+			else if (KeyCode == 's' || KeyCode == 'S')
+			{
+				PlayerPosition.Y--;
+			}
+			else if (KeyCode == 'a' || KeyCode == 'A')
+			{
+				PlayerPosition.X++;
+			}
+			else if (KeyCode == 'd' || KeyCode == 'D')
+			{
+				PlayerPosition.X--;
+			}
+		}
+
 		system("cls");
 
 		DrawBG(StartPosition);
@@ -120,7 +120,6 @@ int main()
 		SetLocation(Temp);
 		cout << "P";
 	}
-
 
 	return 0;
 }
